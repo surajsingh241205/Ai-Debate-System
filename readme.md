@@ -59,25 +59,31 @@ Each agent operates independently with a dedicated role prompt, ensuring unbiase
 
 ## Project Structure
 
+```
 AI-Debate-System/
-│
-├── agents/
-│   ├── pro_agent.py
-│   ├── con_agent.py
-│   └── judge_agent.py
-│
+├── .env                  # Environment variables (sensitive data)
+├── requirements.txt      # Project dependencies
+├── README.md             # Project description and instructions (CRITICAL)
+├── LICENSE               # License information (important for open source)
+├── app.py                # Main application entry point
 ├── core/
-│   └── llm_engine.py
-│
-├── templates/
-│   └── index.html
-│
-├── static/
-│   └── css/style.css
-│
-├── app.py
-├── .env
-└── requirements.txt
+│   ├── __init__.py       # Makes 'core' a Python module
+│   └── llm_engine.py     # Handles LLM interactions
+├── agents/
+│   ├── __init__.py       # Makes 'agents' a Python module
+│   ├── pro_agent.py      # Logic for the 'pro' debater
+│   ├── con_agent.py      # Logic for the 'con' debater
+│   └── judge_agent.py    # Logic for the judge
+├── frontend/             # Dedicated directory for web interface assets
+│   ├── templates/
+│   │   └── index.html    # HTML templates
+│   └── static/
+│       └── css/
+│           └── style.css # CSS files
+└── tests/                # Directory for unit and integration tests (RECOMMENDED)
+    ├── test_agents.py
+    └── test_core.py
+```
 
 ---
 
