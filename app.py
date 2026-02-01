@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import re
-
+import os
 from core.llm_engine import ask_llm
 from agents.pro_agent import PRO_PROMPT
 from agents.con_agent import CON_PROMPT
@@ -78,6 +78,6 @@ Agent B Argument:
         topic=topic
     )
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port, debug=True)
