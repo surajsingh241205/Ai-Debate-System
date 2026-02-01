@@ -6,7 +6,11 @@ from agents.pro_agent import PRO_PROMPT
 from agents.con_agent import CON_PROMPT
 from agents.judge_agent import JUDGE_PROMPT
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="static",
+    template_folder="templates"
+)
 
 
 # -------------------------------
@@ -27,6 +31,11 @@ def extract_scores(text):
 # -------------------------------
 # Main Route
 # -------------------------------
+
+@app.route("/health")
+def health():
+    return "OK"
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None
@@ -78,6 +87,7 @@ Agent B Argument:
         topic=topic
     )
 
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=10000)
