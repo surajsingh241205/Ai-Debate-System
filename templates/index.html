@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Debate System - Multi-Agent Intelligence Platform</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">AI</div>
+                <span class="logo-text">Debate System</span>
+            </div>
+            <div class="beta-badge">Beta</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Input Section -->
+        <section class="input-section">
+            <h1 class="section-title">Start a Debate</h1>
+            <p class="section-subtitle">Enter a topic and let our AI agents analyze it from multiple perspectives</p>
+            
+            <form method="POST" class="input-group">
+                <div class="input-wrapper">
+                    <label for="topic" class="input-label">Debate Topic</label>
+                    <input 
+                        type="text" 
+                        id="topic"
+                        name="topic" 
+                        class="text-input" 
+                        placeholder="e.g., Should artificial intelligence be regulated by governments?"
+                        required
+                    >
+                </div>
+                <button type="submit" class="btn-primary">
+                    <span>Start Debate</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.16667 10H15.8333M15.8333 10L10 4.16667M15.8333 10L10 15.8333" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </form>
+        </section>
+
+        {% if result %}
+        <!-- Results Section -->
+        <section class="results-section">
+            <!-- Debate Topic Header -->
+            <div class="debate-header">
+                <div class="debate-topic-label">Debate Topic</div>
+                <h2 class="debate-topic">{{ topic }}</h2>
+            </div>
+
+            <!-- Agent Cards -->
+            <div class="agents-grid">
+                <!-- Agent A - Supporting -->
+                <article class="agent-card supporting">
+                    <div class="agent-header">
+                        <div class="agent-icon">A</div>
+                        <div class="agent-info">
+                            <div class="agent-role">Agent A</div>
+                            <h3 class="agent-name">Supporting Argument</h3>
+                        </div>
+                    </div>
+                    <div class="agent-body">
+                        <div class="agent-response">{{ result.pro }}</div>
+                    </div>
+                </article>
+
+                <!-- Agent B - Opposing -->
+                <article class="agent-card opposing">
+                    <div class="agent-header">
+                        <div class="agent-icon">B</div>
+                        <div class="agent-info">
+                            <div class="agent-role">Agent B</div>
+                            <h3 class="agent-name">Opposing Argument</h3>
+                        </div>
+                    </div>
+                    <div class="agent-body">
+                        <div class="agent-response">{{ result.con }}</div>
+                    </div>
+                </article>
+            </div>
+
+
+            
+
+            <!-- Judge Section -->
+            <div class="judge-section">
+                <article class="judge-card">
+                    <div class="judge-header">
+                        <div class="judge-icon"><i class="fa-solid fa-gavel"></i></div>
+                        <div class="judge-info">
+                            <div class="judge-role">Neutral Arbitrator</div>
+                            <h3 class="judge-name">Judge's Verdict</h3>
+                        </div>
+                    </div>
+                    <div class="judge-body">
+                        <div class="verdict-label">Final Analysis</div>
+                        <!-- Score Meter -->
+                            <div class="score-section">
+
+                                <div class="score-row">
+                                    <div class="score-label">Agent A</div>
+                                        <div class="score-bar">
+                                            <div class="score-fill agent-a"style="width: {{ result.a_score }}%;">
+                                                {{ result.a_score }}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="score-row">
+                                        <div class="score-label">Agent B</div>
+                                            <div class="score-bar">
+                                                <div class="score-fill agent-b"style="width: {{ result.b_score }}%;">
+                                                    {{ result.b_score }}%
+                                                </div>
+                                            </div>
+                            </div>
+
+    <div class="winner-label">
+        <i class="fa-solid fa-shield" style="color: #3B82F6; font-size: 28px;"></i> Winner: <strong>{{ result.winner }}</strong>
+    </div>
+
+</div>
+
+                        <div class="judge-verdict">{{ result.verdict }}</div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">💭</div>
+            <p class="empty-text">Enter a debate topic above to begin</p>
+        </div>
+        {% endif %}
+
+        
+    </main>
+
+    <script>
+        // Sequential animation controller
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultsSection = document.querySelector('.results-section');
+            
+            if (resultsSection) {
+                // Animate cards sequentially
+                const agentACard = document.querySelector('.agent-card.supporting');
+                const agentBCard = document.querySelector('.agent-card.opposing');
+                const judgeCard = document.querySelector('.judge-card');
+                
+                const agentAText = document.querySelector('.agent-card.supporting .agent-response');
+                const agentBText = document.querySelector('.agent-card.opposing .agent-response');
+                const judgeText = document.querySelector('.judge-verdict');
+                
+                // Start Agent A animation
+                setTimeout(() => {
+                    agentACard.classList.add('animate-in');
+                    setTimeout(() => {
+                        agentAText.classList.add('typing');
+                    }, 400);
+                }, 200);
+                
+                // Start Agent B animation after Agent A
+                setTimeout(() => {
+                    agentBCard.classList.add('animate-in');
+                    setTimeout(() => {
+                        agentBText.classList.add('typing');
+                    }, 400);
+                }, 1200);
+                
+                // Start Judge animation after Agent B
+                setTimeout(() => {
+                    judgeCard.classList.add('animate-in');
+                    setTimeout(() => {
+                        judgeText.classList.add('typing');
+                    }, 400);
+                }, 2200);
+            }
+        });
+    </script>
+</body>
+</html>
